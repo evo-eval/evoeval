@@ -1,0 +1,8 @@
+wget
+appdirs
+tempdir
+multipledispatch
+numpy
+tqdm
+termcolor
+evalplus @ git+https://github.com/evalplus/evalplus
