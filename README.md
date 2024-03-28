@@ -108,7 +108,7 @@ write_jsonl(f"{evoeval_benchmark}_samples.jsonl", samples)
 You can use our provided [docker](https://docs.docker.com/get-docker/) image:
 
 ```bash
-docker run -v $(pwd):/app evoeval/evoeval:latest --dataset EvoEval_difficult --samples EvoEval_difficult_samples.jsonl
+docker run --rm -v $(pwd):/app evoeval/evoeval:latest --dataset EvoEval_difficult --samples EvoEval_difficult_samples.jsonl
 ```
 
 Or run it locally:
@@ -134,8 +134,22 @@ Reading samples...
 EvoEval_difficult
 pass@1: 0.520 # for reference GPT-4 solves more than 80% of problems in HumanEval
 ```
-
 This shows the pass@1 score for the EvoEval_difficult benchmark. You can use `--i-just-wanna-run` to recompute the evaluation result
+
+> [!Note]
+> 
+> You can also evaluate the LLM solutions in a folder format with each subfolder contains
+> the LLM solution for each problem in the benchmark
+>
+> For example, you can grab the [GPT-4 solutions](https://github.com/evo-eval/evoeval/releases/download/v0.1.0/gpt-4_temp_0.0.zip) in our [v0.1.0 release](https://github.com/evo-eval/evoeval/releases/tag/v0.1.0).
+> After unzipping, you can run the following command:
+> 
+> ```bash
+> evoeval.evaluate --dataset EvoEval_difficult --samples gpt-4_temp_0.0/EvoEval_difficult 
+> ```
+>
+> to obtain the same result as above using `.jsonl`
+
 
 ## 🔠 Benchmarks
 
