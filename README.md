@@ -4,7 +4,7 @@
     <a href="https://evo-eval.github.io/leaderboard.html"><img src="https://img.shields.io/badge/🏆-LeaderBoard-8e7cc3?style=for-the-badge"></a>
     <a href="https://evo-eval.github.io/visualization.html"><img src="https://img.shields.io/badge/🔮-Visualization-3d85c6?style=for-the-badge"></a>
     <a href="TODO"><img src="https://img.shields.io/badge/📃-Arxiv-b31b1b?style=for-the-badge"></a>
-    <a href="https://huggingface.co/evoeval"><img src="https://img.shields.io/badge/🤗-Huggingface-f59e0b?style=for-the-badge"></a>
+    <a href="https://huggingface.co/evoeval/"><img src="https://img.shields.io/badge/🤗-Huggingface-f59e0b?style=for-the-badge"></a>
     <a href="https://pypi.org/project/evoeval/"><img src="https://img.shields.io/badge/0.1.0-Pypi-3b719f?style=for-the-badge&logo=pypi"></a>
 </p>
 
@@ -16,17 +16,23 @@
     <big><a href="#-acknowledgement">🙏Acknowledgement</a></big>
 </p>
 
-## About 
+## <img src="resources/butterfly_dark.png" width="23px" height="auto"> About 
 
-**EvoEval** is a holistic benchmark suite created by _evolving_ **HumanEval** problems:
-- Containing **828** new problems across **5** semantic-altering and **2** semantic-preserving benchmarks
-- Allows evaluation/comparison across different **dimensions** and problem **types** (i.e., _Difficult_, _Creative_ or _Tool Use_ problems) 
-- Complete with [**leaderboard**](https://evo-eval.github.io/leaderboard.html), **groundtruth solutions** and **robust testcases** to easily fit into your evaluation pipeline
-- Generated LLM code samples from **>50** different models to save you time in running experiments
+**EvoEval**<sup>1</sup> is a holistic benchmark suite created by _evolving_ **HumanEval** problems:
+- 🔥 Containing **828** new problems across **5** 🌠 semantic-altering and **2** ⭐ semantic-preserving benchmarks
+- 🔮 Allows evaluation/comparison across different **dimensions** and problem **types** (i.e., _Difficult_, _Creative_ or _Tool Use_ problems). See our [**visualization tool**](https://evo-eval.github.io/visualization.html) for ready-to-use comparison
+- 🏆 Complete with [**leaderboard**](https://evo-eval.github.io/leaderboard.html), **groundtruth solutions**, **robust testcases** and **evaluation scripts** to easily fit into your evaluation pipeline
+- 🤖 Generated LLM code samples from **>50** different models to save you time in running experiments
+
+<sup>1</sup> coincidentally similar pronunciation with 😈 EvilEval
 
 <p align="center">
 <img src="./resources/example.gif" style="width:75%; margin-left: auto; margin-right: auto;">
 </p>
+
+Checkout our 📃 [paper](TODO) and [webpage](https://evo-eval.github.io) for more detail! 
+
+
 
 ## ⚡ Quick Start
 
@@ -61,16 +67,26 @@ pip install -r requirements.txt
 
 Now you are ready to download EvoEval benchmarks and perform evaluation!
 
-### Code generation
+### 🧑‍💻 Code generation
+
+To download our benchmarks, simply use the following code snippet:
+
+```python
+from evoeval.data import get_evo_eval
+
+evoeval_benchmark = "EvoEval_difficult" # you can pick from 7 different benchmarks!
+
+problems = get_evo_eval(evoeval_benchmark)
+```
 
 For code generation and evaluation, we adopt the same style as [HumanEval+](https://github.com/evalplus/evalplus) and [HumanEval](https://github.com/openai/human-eval).
 
-Implement the `GEN_SOLUTION` function by calling the LLM to produce the complete solution (include the code) and save the samples to `samples.jsonl`:
+Implement the `GEN_SOLUTION` function by calling the LLM to produce the complete solution (include the function header + code) and save the samples to `{benchmark}_samples.jsonl`:
 
 ```python
 from evoeval.data import get_evo_eval, write_jsonl
 
-evoeval_benchmark = "EvoEval_difficult" # you can pick from 7 different benchmarks!
+evoeval_benchmark = "EvoEval_difficult"
 
 samples = [
     dict(task_id=task_id, solution=GEN_SOLUTION(problem["prompt"]))
@@ -79,9 +95,17 @@ samples = [
 write_jsonl(f"{evoeval_benchmark}_samples.jsonl", samples)
 ```
 
-### Evaluation
+> [!TIP]
+> 
+> EvoEval `samples.jsonl` expects the solution field to contain the **complete** code implementation, this is 
+> slightly different from the original HumanEval where the solution field only contains the function body.
+> 
+> If you want to follow exactly like HumanEval setup, checkout our 🤗 Huggingface [datasets](https://huggingface.co/evoeval), which can be directly ran with
+> HumanEval evaluation [script](https://huggingface.co/evoeval)
 
-You are strongly recommended to use a sandbox such as [docker](https://docs.docker.com/get-docker/):
+### 🕵️ Evaluation
+
+You can use our provided [docker](https://docs.docker.com/get-docker/) image:
 
 ```bash
 docker run -v $(pwd):/app evoeval/evoeval:latest --dataset EvoEval_difficult --samples EvoEval_difficult_samples.jsonl
@@ -93,13 +117,14 @@ Or run it locally:
 evoeval.evaluate --dataset EvoEval_difficult --samples EvoEval_difficult_samples.jsonl
 ```
 
+Or if you are using it as a local repository:
+
 ```bash
-# run if you are using the local repo
 export PYTHONPATH=$PYTHONPATH:$(pwd)
 python evoeval/evaluate.py --dataset EvoEval_difficult --samples EvoEval_difficult_samples.jsonl
 ```
 
-You should expect to see the following output (when evaluated on GPT4):
+You should expect to see the following output (when evaluated on GPT-4):
 ```
 Computing expected output...
 Expected outputs computed in 11.24s
@@ -107,16 +132,18 @@ Reading samples...
 100it [00:00, 164.16it/s]
 100%|████████████████████████████████████████████████████████████████| 100/100 [00:07<00:00, 12.77it/s]
 EvoEval_difficult
-pass@1: 0.520
+pass@1: 0.520 # for reference GPT-4 solves more than 80% of problems in HumanEval
 ```
 
-This shows the pass@1 score for the benchmark. You can use `--i-just-wanna-run` to recompute the evaluation result
+This shows the pass@1 score for the EvoEval_difficult benchmark. You can use `--i-just-wanna-run` to recompute the evaluation result
 
 ## 🔠 Benchmarks
 
-**EvoEval** contains **7** different benchmarks, each with a unique set of problems evolved from the original **HumanEval** problems.:
+**EvoEval** contains **7** different benchmarks, each with a unique set of problems 
+evolved from the original **HumanEval** problems. 🌠 denotes semantic-altering benchmarks, 
+while ⭐ denotes semantic-preserving benchmarks.:
 
-<details><summary><b>⭐EvoEval_difficult:</b></summary>
+<details><summary><b>🌠EvoEval_difficult:</b></summary>
 <div>
 
 > Introduce complexity by adding additional constraints and requirements,
@@ -125,7 +152,7 @@ This shows the pass@1 score for the benchmark. You can use `--i-just-wanna-run` 
 </div>
 </details>
 
-<details><summary><b>⭐EvoEval_creative:</b></summary>
+<details><summary><b>🌠EvoEval_creative:</b></summary>
 <div>
 
 > Generate a more creative problem compared to the original through the use
@@ -134,7 +161,7 @@ This shows the pass@1 score for the benchmark. You can use `--i-just-wanna-run` 
 </details>
 
 
-<details><summary><b>⭐EvoEval_subtle:</b></summary>
+<details><summary><b>🌠EvoEval_subtle:</b></summary>
 <div>
 
 > Make a subtle and minor change to the original problem such as inverting or
@@ -143,7 +170,7 @@ This shows the pass@1 score for the benchmark. You can use `--i-just-wanna-run` 
 </details>
 
 
-<details><summary><b>⭐EvoEval_combine:</b></summary>
+<details><summary><b>🌠EvoEval_combine:</b></summary>
 <div>
 
 > Combine two different problems by integrating the concepts from both problems. In order to select problems that make sense to combine, we apply a simple heuristic
@@ -152,7 +179,7 @@ This shows the pass@1 score for the benchmark. You can use `--i-just-wanna-run` 
 </div>
 </details>
 
-<details><summary><b>⭐EvoEval_tool_use:</b></summary>
+<details><summary><b>🌠EvoEval_tool_use:</b></summary>
 <div>
 
 > Produce a new problem containing a main problem and one or more helpers
@@ -212,8 +239,8 @@ Further, we also provide all code samples from LLMs on the **EvoEval** benchmark
 
 * See the attachment of our [v0.1.0 release](https://github.com/evo-eval/evoeval/releases/tag/v0.1.0).
 
-Each LLM generation is packaged in a zip file named like `${model_name}_temp_0.0.zip`. You can unzip the folder and obtain the
-LLM generation for each of our 7 benchmarks + the original HumanEval problems.
+Each LLM generation is packaged in a zip file named like `{model_name}_temp_0.0.zip`. You can unzip the folder and obtain the
+LLM generation for each of our 7 benchmarks + the original HumanEval problems. Note that we only evaluate the greedy output for each LLM.
 
 ## 📝 Citation
 
@@ -234,5 +261,6 @@ LLM generation for each of our 7 benchmarks + the original HumanEval problems.
 
 * [HumanEval](https://github.com/openai/human-eval)
 * We especially thank [EvalPlus](https://github.com/evalplus/evalplus)
+
 
 
