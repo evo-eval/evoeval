@@ -3,7 +3,7 @@
 <p align="center">
     <a href="https://evo-eval.github.io/leaderboard.html"><img src="https://img.shields.io/badge/🏆-LeaderBoard-8e7cc3?style=for-the-badge"></a>
     <a href="https://evo-eval.github.io/visualization.html"><img src="https://img.shields.io/badge/🔮-Visualization-3d85c6?style=for-the-badge"></a>
-    <a href="TODO"><img src="https://img.shields.io/badge/📃-Arxiv-b31b1b?style=for-the-badge"></a>
+    <a href="https://arxiv.org/abs/2403.19114"><img src="https://img.shields.io/badge/📃-Arxiv-b31b1b?style=for-the-badge"></a>
     <a href="https://huggingface.co/evoeval/"><img src="https://img.shields.io/badge/🤗-Huggingface-f59e0b?style=for-the-badge"></a>
     <a href="https://pypi.org/project/evoeval/"><img src="https://img.shields.io/badge/0.1.0-Pypi-3b719f?style=for-the-badge&logo=pypi"></a>
 </p>
@@ -30,7 +30,7 @@
 <img src="./resources/example.gif" style="width:75%; margin-left: auto; margin-right: auto;">
 </p>
 
-Checkout our 📃 [paper](TODO) and [webpage](https://evo-eval.github.io) for more detail! 
+Checkout our 📃 [paper](https://arxiv.org/abs/2403.19114) and [webpage](https://evo-eval.github.io) for more detail! 
 
 
 
