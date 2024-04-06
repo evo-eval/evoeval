@@ -19,7 +19,7 @@
 ## <img src="resources/butterfly_dark.png" width="23px" height="auto"> About 
 
 **EvoEval**<sup>1</sup> is a holistic benchmark suite created by _evolving_ **HumanEval** problems:
-- 🔥 Containing **828** new problems across **5** 🌠 semantic-altering and **2** ⭐ semantic-preserving benchmarks
+- 🔥 Contains **828** new problems across **5** 🌠 semantic-altering and **2** ⭐ semantic-preserving benchmarks
 - 🔮 Allows evaluation/comparison across different **dimensions** and problem **types** (i.e., _Difficult_, _Creative_ or _Tool Use_ problems). See our [**visualization tool**](https://evo-eval.github.io/visualization.html) for ready-to-use comparison
 - 🏆 Complete with [**leaderboard**](https://evo-eval.github.io/leaderboard.html), **groundtruth solutions**, **robust testcases** and **evaluation scripts** to easily fit into your evaluation pipeline
 - 🤖 Generated LLM code samples from **>50** different models to save you time in running experiments
